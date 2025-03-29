@@ -3,7 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
-import com.farmacia.sanrafael.APIJava.service.IProducto;
+import com.farmacia.    sanrafael.APIJava.service.IProducto;
 import java.util.List;
 @RestController
 @RequestMapping("/process")
