@@ -16,16 +16,16 @@ public class ProductoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProducto;
 
-    @Column(columnDefinition = "VARCHAR(100)")
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String nombre;
 
     @Column(columnDefinition = "VARCHAR(200)")
     private String descripcion;
 
-    @Column(columnDefinition = "DOUBLE")
+    @Column(columnDefinition = "DOUBLE", nullable = false)
     private Double precio;
 
-    @Column(columnDefinition = "INT")
+    @Column(columnDefinition = "INT", nullable = false)
     private Integer stock;
 
     @Temporal(TemporalType.DATE)
