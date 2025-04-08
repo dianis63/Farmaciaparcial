@@ -13,18 +13,18 @@ public class EmpleadoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long   id_empleado;
 
-    @Column(columnDefinition = "VARCHAR(100)", length = 100, nullable = false)
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String nombre;
 
-    @Column(columnDefinition = "VARCHAR(100)", length = 100, nullable = false)
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String apellido;
 
-    @Column(columnDefinition = "VARCHAR(50)", length = 50)
+    @Column(columnDefinition = "VARCHAR(50)")
     private String cargo;
 
-    @Column(columnDefinition = "VARCHAR(20)", length = 20)
+    @Column(columnDefinition = "VARCHAR(20)")
     private String telefono;
 
-    @Column(columnDefinition = "VARCHAR(25)", length = 25)
+    @Column(columnDefinition = "VARCHAR(25)")
     private String correo;
 }
