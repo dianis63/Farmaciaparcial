@@ -14,7 +14,7 @@ public class VentaEntity {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_venta;
+    private Long id_venta;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "DATETIME", nullable = false)
@@ -24,10 +24,10 @@ public class VentaEntity {
     private Double total;
 
     @Column(columnDefinition = "INT", nullable = false)
-    private Integer id_cliente;
+    private Long id_cliente;
 
     @Column(columnDefinition = "INT", nullable = false)
-    private Integer id_empleado;
+    private Long id_empleado;
 
     @Column(columnDefinition = "VARCHAR(1)", length = 1, nullable = false)
     private String estado;

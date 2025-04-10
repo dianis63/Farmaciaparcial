@@ -11,7 +11,7 @@ public class DetalleVentaEntity {
     @Id
     @Column(columnDefinition = "INT", name = "id_detalle")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_detalle;
+    private Long id_detalle;
 
     @Column(columnDefinition = "INT", name = "id_venta", nullable = false)
     private Integer id_venta;
