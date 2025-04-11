@@ -14,7 +14,7 @@ public class ProductoEntity {
     @Id
     @Column(columnDefinition = "INT", name="id_producto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProducto;
+    private Integer idProducto;
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String nombre;

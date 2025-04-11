@@ -11,7 +11,7 @@ public class EmpleadoEntity {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long   id_empleado;
+    private Integer id_empleado;
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String nombre;
@@ -19,7 +19,7 @@ public class EmpleadoEntity {
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String apellido;
 
-    @Column(columnDefinition = "VARCHAR(50)")
+    @Column(columnDefinition = "VARCHAR(50)", nullable = false)
     private String cargo;
 
     @Column(columnDefinition = "VARCHAR(20)")

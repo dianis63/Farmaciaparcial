@@ -11,7 +11,7 @@ public class ClienteEntity {
     @Id
     @Column(columnDefinition = "INT",name = "id_cliente")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_cliente;
+    private Integer id_cliente;
 
     @Column(columnDefinition = "Varchar(100)", nullable = false)
     private String nombre;
