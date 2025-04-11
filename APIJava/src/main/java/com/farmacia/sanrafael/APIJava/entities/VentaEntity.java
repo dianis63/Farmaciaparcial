@@ -14,7 +14,7 @@ public class VentaEntity {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_venta;
+    private Long id_venta;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "DATETIME", nullable = false)

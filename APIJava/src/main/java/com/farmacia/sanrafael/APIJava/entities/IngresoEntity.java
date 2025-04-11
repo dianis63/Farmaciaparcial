@@ -14,10 +14,10 @@ public class IngresoEntity {
     @Id
     @Column(columnDefinition = "INT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_ingreso;
+    private Long id_ingreso;
 
     @Column(columnDefinition = "INT", nullable = false)
-    private Integer id_producto;
+    private Long id_producto;
 
     @Column(columnDefinition = "INT", nullable = false)
     private Integer cantidad;
@@ -30,5 +30,5 @@ public class IngresoEntity {
     private Date fecha_ingreso = new Date();
 
     @Column(columnDefinition = "INT", nullable = false)
-    private Integer id_empleado;
+    private Long id_empleado;
 }

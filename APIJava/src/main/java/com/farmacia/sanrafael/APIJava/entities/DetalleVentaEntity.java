@@ -11,16 +11,16 @@ public class DetalleVentaEntity {
     @Id
     @Column(columnDefinition = "INT", name = "id_detalle")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_detalle;
+    private Long id_detalle;
 
     @Column(columnDefinition = "INT", name = "id_venta", nullable = false)
-    private Integer id_venta;
+    private Long id_venta;
 
     @Column(columnDefinition = "INT", name = "id_producto", nullable = false)
-    private Integer id_producto;
+    private Long id_producto;
 
     @Column(columnDefinition = "INT", nullable = false)
-    private Integer cantidad;
+    private Long cantidad;
 
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private Double precio_unitario;
