@@ -9,6 +9,6 @@ public interface IEmpleado {
     List<EmpleadoEntity> findAll();
     EmpleadoEntity save(EmpleadoEntity empleado);
 
-    List<EmpleadoEntity> findPriceLess(long id_empleado);
+    List<EmpleadoEntity> findEmployee(long id_empleado);
 
 }
