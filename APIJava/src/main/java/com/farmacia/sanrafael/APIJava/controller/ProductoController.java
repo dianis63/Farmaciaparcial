@@ -1,5 +1,8 @@
 package com.farmacia.sanrafael.APIJava.controller;
+import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
@@ -21,5 +24,15 @@ public class ProductoController {
     @PostMapping("/producto")
     public ProductoEntity saveProducto(@RequestBody ProductoEntity producto) {
         return iProducto.save(producto);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/ConsultaProducto")
+    public ResponseEntity<?> findProduct(@RequestParam ("idProducto") long idProducto) {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Producto encontrado con con éxito.")
+                .data(iProducto.findProduct(idProducto))
+                .build(),
+                HttpStatus.OK);
     }
 }
