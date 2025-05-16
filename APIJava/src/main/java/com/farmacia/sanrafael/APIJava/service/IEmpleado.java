@@ -10,4 +10,5 @@ public interface IEmpleado {
     EmpleadoEntity save(EmpleadoEntity empleado);
 
     List<EmpleadoEntity> findPriceLess(long id_empleado);
+
 }
