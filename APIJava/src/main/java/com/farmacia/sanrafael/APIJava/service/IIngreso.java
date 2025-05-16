@@ -5,4 +5,6 @@ import java.util.List;
 public interface IIngreso {
     List<IngresoEntity> findAll();
     IngresoEntity save(IngresoEntity ingreso);
+
+    List<IngresoEntity> findQuantity(Integer cantidad);
 }

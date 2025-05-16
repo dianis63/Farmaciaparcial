@@ -18,4 +18,9 @@ public class IngresoImpl implements IIngreso {
 
     @Override
     public IngresoEntity save(IngresoEntity ingresoEntity) {return ingresoRepository.save(ingresoEntity);}
+
+    @Override
+    public List<IngresoEntity> findQuantity(Integer cantidad) {
+        return ingresoRepository.findQuantity(cantidad);
+    }
 }
