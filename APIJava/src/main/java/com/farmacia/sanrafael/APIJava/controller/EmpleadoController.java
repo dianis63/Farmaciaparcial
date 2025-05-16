@@ -24,5 +24,9 @@ public class EmpleadoController {
         return iEmpleado.save(empleado);
     }
 
-
+    @Transactional(readOnly = true)
+    @GetMapping("/ConsultaEmpleado/{id_empleado}")
+    public List<EmpleadoEntity> findPriceLess(@RequestParam("id_empleado") long id_empleado) {
+        return iEmpleado.findPriceLess(id_empleado);
+    }
 }

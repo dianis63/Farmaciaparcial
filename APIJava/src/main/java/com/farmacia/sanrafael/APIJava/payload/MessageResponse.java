@@ -7,13 +7,11 @@ import lombok.ToString;
 import java.io.Serializable;
 
 public class MessageResponse implements Serializable {
-    @Builder
-    @ToString
-    @Data
-
-    private string message;
-    private object data;
-
-
+//    @Builder
+//    @ToString
+//    @Data
+//
+//    private string message;
+//    private object data;
 
 }
