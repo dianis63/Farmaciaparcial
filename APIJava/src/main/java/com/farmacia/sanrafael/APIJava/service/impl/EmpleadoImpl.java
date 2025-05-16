@@ -11,6 +11,7 @@ public class EmpleadoImpl implements IEmpleado {
     @Autowired
     private EmpleadoRepository EmpleadoRepository;
 
+
     @Override
     public List<EmpleadoEntity> findAll(){
         return EmpleadoRepository.findAll();
@@ -19,6 +20,11 @@ public class EmpleadoImpl implements IEmpleado {
     @Override
     public EmpleadoEntity save(EmpleadoEntity empleado) {
         return EmpleadoRepository.save(empleado);
+    }
+
+    @Override
+    public List<EmpleadoEntity> findPriceLess(long id_empleado) {
+        return EmpleadoRepository.Buscarempleado(id_empleado);
     }
 
 }
