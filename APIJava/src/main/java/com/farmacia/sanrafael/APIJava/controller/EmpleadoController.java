@@ -42,7 +42,7 @@ public class EmpleadoController {
     @GetMapping("/ConsultaEmpleado")
     public ResponseEntity<?> findEmployee(@RequestParam ("id_empleado") long id_empleado) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Empleado encontrado con con éxito.")
+                .message("Empleado encontrado con éxito.")
                 .data(iEmpleado.findEmployee(id_empleado))
                 .build(),
                 HttpStatus.OK);
