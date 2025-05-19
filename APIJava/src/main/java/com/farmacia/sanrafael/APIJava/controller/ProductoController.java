@@ -30,7 +30,7 @@ public class ProductoController {
     @GetMapping("/ConsultaProducto")
     public ResponseEntity<?> findProduct(@RequestParam ("idProducto") long idProducto) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Producto encontrado con con éxito.")
+                .message("Producto encontrado con éxito.")
                 .data(iProducto.findProduct(idProducto))
                 .build(),
                 HttpStatus.OK);

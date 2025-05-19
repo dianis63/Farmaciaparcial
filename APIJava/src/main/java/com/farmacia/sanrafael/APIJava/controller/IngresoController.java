@@ -41,7 +41,7 @@ public class IngresoController {
     @GetMapping("/ConsultaIngreso")
     public ResponseEntity<?> findQuantity(@RequestParam ("cantidad") Integer cantidad) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Ingreso encontrado con con éxito.")
+                .message("Ingreso con cantidad "+cantidad+ " encontrado con con éxito.")
                 .data(iIngreso.findQuantity(cantidad))
                 .build(),
                 HttpStatus.OK);

@@ -32,7 +32,7 @@ public class VentaController {
     @PostMapping("/venta")
     public ResponseEntity<?> saveProducto(@RequestBody VentaEntity venta) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Ventas guardada con éxito.")
+                .message("Venta guardada con éxito.")
                 .data(iVenta.save(venta))
                 .build(),
                 HttpStatus.OK);
@@ -42,7 +42,7 @@ public class VentaController {
     @GetMapping("/ConsultaVenta")
     public ResponseEntity<?> VentasMayoresA(@RequestParam ("total") double total) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Ventas mayores a encontradas con éxito.")
+                .message("Ventas mayores a $" + total + " encontradas con éxito.")
                 .data(iVenta.VentasMayoresA(total))
                 .build(),
                 HttpStatus.OK);
