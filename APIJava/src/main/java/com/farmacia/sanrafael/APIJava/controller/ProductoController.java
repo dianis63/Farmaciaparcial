@@ -16,16 +16,22 @@ public class ProductoController {
 
     @Transactional(readOnly = true)
     @GetMapping("/productos")
-    public List<ProductoEntity> getProductos() {
-        return iProducto.findAll();
+    public ResponseEntity<?>getProductos() {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Productos recuperados con éxito.")
+                .data(iProducto.findAll())
+                .build(),
+                HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping("/producto")
-    public ProductoEntity saveProducto(@RequestBody ProductoEntity producto) {
-        return iProducto.save(producto);
+    public ResponseEntity<?> saveProducto(@RequestBody ProductoEntity producto) {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Producto guardado con éxito.")
+                .data(iProducto.save(producto))
+                .build(), HttpStatus.CREATED);
     }
-
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaProducto")
     public ResponseEntity<?> findProduct(@RequestParam ("idProducto") long idProducto) {
