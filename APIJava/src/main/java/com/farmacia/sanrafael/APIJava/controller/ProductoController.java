@@ -1,10 +1,14 @@
 package com.farmacia.sanrafael.APIJava.controller;
+import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
-import com.farmacia.    sanrafael.APIJava.service.IProducto;
-import java.util.List;
+import com.farmacia.sanrafael.APIJava.service.IProducto;
+
 @RestController
 @RequestMapping("/process")
 public class ProductoController {
@@ -13,13 +17,30 @@ public class ProductoController {
 
     @Transactional(readOnly = true)
     @GetMapping("/productos")
-    public List<ProductoEntity> getProductos() {
-        return iProducto.findAll();
+    public ResponseEntity<?> getProductos() {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Productos recuperados con éxito.")
+                .data(iProducto.findAll())
+                .build(),
+                HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping("/producto")
-    public ProductoEntity saveProducto(@RequestBody ProductoEntity producto) {
-        return iProducto.save(producto);
+    public ResponseEntity<?> saveProducto(@Valid @RequestBody ProductoEntity producto) {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message(String.format("Producto %s guardado con éxito.", producto.getNombre()))
+                .data(iProducto.save(producto))
+                .build(), HttpStatus.CREATED);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/ConsultaProducto")
+    public ResponseEntity<?> findProduct(@RequestParam("idProducto") long idProducto) {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Producto encontrado con éxito.")
+                .data(iProducto.findProduct(idProducto))
+                .build(),
+                HttpStatus.OK);
     }
 }

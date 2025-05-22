@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+@Builder
+@ToString
+@Data
 public class MessageResponse implements Serializable {
-//    @Builder
-//    @ToString
-//    @Data
-//
-//    private string message;
-//    private object data;
-
+    private String message;
+    private Object data;
+    private LocalDateTime timestamp;
 }

@@ -23,7 +23,7 @@ public class EmpleadoImpl implements IEmpleado {
     }
 
     @Override
-    public List<EmpleadoEntity> findPriceLess(long id_empleado) {
+    public List<EmpleadoEntity> findEmployee(long id_empleado) {
         return EmpleadoRepository.Buscarempleado(id_empleado);
     }
 

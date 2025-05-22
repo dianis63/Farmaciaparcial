@@ -1,5 +1,6 @@
 package com.farmacia.sanrafael.APIJava.service.impl;
 
+import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import com.farmacia.sanrafael.APIJava.entities.VentaEntity;
 import com.farmacia.sanrafael.APIJava.repository.VentaRepository;
 import com.farmacia.sanrafael.APIJava.service.IVenta;
@@ -22,4 +23,10 @@ public class VentaImpl implements IVenta {
     public VentaEntity save(VentaEntity venta) {
         return ventaRepository.save(venta);
     }
+
+    @Override
+    public List<VentaEntity> VentasMayoresA(double totalm) {
+        return ventaRepository.VentasMayoresA(totalm);
+    }
+
 }

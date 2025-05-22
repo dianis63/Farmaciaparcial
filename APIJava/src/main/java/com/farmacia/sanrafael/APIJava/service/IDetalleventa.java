@@ -7,4 +7,7 @@ import java.util.List;
 public interface IDetalleventa {
     List<DetalleVentaEntity> findAll();
     DetalleVentaEntity save(DetalleVentaEntity venta);
+    List<DetalleVentaEntity> Detalle_VentaN(long id_venta);
+
 }
+
