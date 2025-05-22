@@ -1,14 +1,15 @@
 package com.farmacia.sanrafael.APIJava.controller;
+
 import com.farmacia.sanrafael.APIJava.entities.ClienteEntity;
-import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import com.farmacia.sanrafael.APIJava.service.ICliente;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 @RestController
 @RequestMapping("/process")
 public class ClienteController {
@@ -27,9 +28,9 @@ public class ClienteController {
 
     @Transactional
     @PostMapping("/cliente")
-    public ResponseEntity<?> save(@RequestBody ClienteEntity cliente) {
+    public ResponseEntity<?> save(@Valid @RequestBody ClienteEntity cliente) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Cliente guardado con éxito.")
+                .message(String.format("Cliente %s %s guardado con éxito.", cliente.getNombre(), cliente.getApellido()))
                 .data(iCliente.save(cliente))
                 .build(),
                 HttpStatus.OK);
@@ -37,7 +38,7 @@ public class ClienteController {
 
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaCliente")
-    public ResponseEntity<?> findCustomer(@RequestParam ("id_cliente") long id_cliente) {
+    public ResponseEntity<?> findCustomer(@RequestParam("id_cliente") long id_cliente) {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Cliente encontrado con con éxito.")
                 .data(iCliente.findCustomer(id_cliente))

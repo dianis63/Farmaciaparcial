@@ -1,6 +1,7 @@
 package com.farmacia.sanrafael.APIJava.controller;
 
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.farmacia.sanrafael.APIJava.service.IEmpleado;
 import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/process")
@@ -30,9 +29,9 @@ public class EmpleadoController {
 
     @Transactional
     @PostMapping("/empleado")
-    public ResponseEntity<?> save(@RequestBody EmpleadoEntity empleado) {
+    public ResponseEntity<?> save(@Valid @RequestBody EmpleadoEntity empleado) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Empleado guardado con éxito.")
+                .message(String.format("Empleado %s %s guardado con éxito.", empleado.getNombre(), empleado.getApellido()))
                 .data(iEmpleado.save(empleado))
                 .build(),
                 HttpStatus.OK);
