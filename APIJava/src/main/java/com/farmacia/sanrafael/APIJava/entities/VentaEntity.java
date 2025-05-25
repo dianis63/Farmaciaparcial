@@ -24,13 +24,15 @@ public class VentaEntity {
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private Double total;
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_cliente", nullable = false)
     @NotNull(message = "El campo 'id_cliente' no puede ser nulo.")
-    private Long id_cliente;
+    private ClienteEntity cliente;
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_empleado", nullable = false)
     @NotNull(message = "El campo 'id_empleado' no puede ser nulo.")
-    private Long id_empleado;
+    private EmpleadoEntity empleado;
 
     @NotNull(message = "El estado no puede ser nulo.")
     @Column(columnDefinition = "VARCHAR(1)", length = 1, nullable = false)

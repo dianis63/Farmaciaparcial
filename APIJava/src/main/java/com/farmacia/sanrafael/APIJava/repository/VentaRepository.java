@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface VentaRepository extends JpaRepository<VentaEntity, Long> {
 
-    @Query("select v from VentaEntity v where v.total = :totalm")
+    @Query("select v from VentaEntity v where v.total >= :totalm")
     List<VentaEntity> VentasMayoresA(@Param("totalm")double totalm);
 }
 

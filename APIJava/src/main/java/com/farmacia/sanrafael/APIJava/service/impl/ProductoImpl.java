@@ -1,5 +1,4 @@
 package com.farmacia.sanrafael.APIJava.service.impl;
-import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
@@ -25,4 +24,10 @@ public class ProductoImpl implements IProducto {
     public List<ProductoEntity> findProduct(long idProducto) {
         return productoRepository.Buscarproducto(idProducto);
     }
+
+    @Override
+    public List<ProductoEntity> buscarPorNombre(String nombre) {
+        return productoRepository.buscarPorNombre(nombre);
+    }
+
 }

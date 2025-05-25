@@ -12,5 +12,5 @@ import java.util.List;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 
     @Query("select e from ClienteEntity e where e.id_cliente = :id_cliente")
-    List<ClienteEntity> Buscarcliente(@Param("id_cliente")long id_cliente);
+    ClienteEntity Buscarcliente(@Param("id_cliente")long id_cliente);
 }

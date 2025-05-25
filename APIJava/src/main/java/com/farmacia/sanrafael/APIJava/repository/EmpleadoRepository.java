@@ -11,6 +11,6 @@ import java.util.List;
 public interface EmpleadoRepository extends JpaRepository<EmpleadoEntity, Long> {
 
     @Query("select e from EmpleadoEntity e where e.id_empleado = :id_empleado")
-    List<EmpleadoEntity> Buscarempleado(@Param("id_empleado")long id_empleado);
+    EmpleadoEntity Buscarempleado(@Param("id_empleado")long id_empleado);
 
 }

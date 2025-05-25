@@ -1,5 +1,5 @@
 package com.farmacia.sanrafael.APIJava.repository;
-import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<ProductoEntity, Long> {
     @Query("select e from ProductoEntity e where e.idProducto = :idProducto")
-    List<ProductoEntity> Buscarproducto(@Param("idProducto")long idProducto);
+    List<ProductoEntity> Buscarproducto(@Param("idProducto") long idProducto);
+
+    @Query("SELECT p FROM ProductoEntity p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<ProductoEntity> buscarPorNombre(@Param("nombre") String nombre);
 }
 

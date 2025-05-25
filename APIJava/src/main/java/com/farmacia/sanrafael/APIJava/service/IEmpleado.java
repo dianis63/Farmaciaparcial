@@ -8,7 +8,5 @@ public interface IEmpleado {
 
     List<EmpleadoEntity> findAll();
     EmpleadoEntity save(EmpleadoEntity empleado);
-
-    List<EmpleadoEntity> findEmployee(long id_empleado);
-
+    EmpleadoEntity findEmployee(long id_empleado);
 }

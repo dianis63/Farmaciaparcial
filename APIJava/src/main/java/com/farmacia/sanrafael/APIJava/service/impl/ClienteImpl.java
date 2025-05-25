@@ -1,6 +1,5 @@
 package com.farmacia.sanrafael.APIJava.service.impl;
 import com.farmacia.sanrafael.APIJava.entities.ClienteEntity;
-import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import com.farmacia.sanrafael.APIJava.repository.ClienteRepository;
 import com.farmacia.sanrafael.APIJava.service.ICliente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class ClienteImpl implements ICliente {
     public ClienteEntity save(ClienteEntity cliente) {return clienteRepository.save(cliente);}
 
     @Override
-    public List<ClienteEntity> findCustomer(long id_cliente) {
+    public ClienteEntity findCustomer(long id_cliente) {
         return clienteRepository.Buscarcliente(id_cliente);
     }
 

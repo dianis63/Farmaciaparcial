@@ -61,4 +61,14 @@ public class ProductoController {
                 .build(),
                 HttpStatus.OK);
     }
+
+@Transactional(readOnly = true)
+    @GetMapping("/buscar")
+    public ResponseEntity<?> buscarProductos(@RequestParam String nombre) {
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Productos encontrados con éxito.")
+                .data(iProducto.buscarPorNombre(nombre))
+                .build(), HttpStatus.OK);
+    }
+
 }
