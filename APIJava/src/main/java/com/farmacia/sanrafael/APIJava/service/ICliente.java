@@ -6,6 +6,6 @@ import java.util.List;
 public interface ICliente {
     List<ClienteEntity> findAll();
     ClienteEntity save(ClienteEntity cliente);
-    List<ClienteEntity> findCustomer(long id_cliente);
+    ClienteEntity findCustomer(long id_cliente);
 
 }

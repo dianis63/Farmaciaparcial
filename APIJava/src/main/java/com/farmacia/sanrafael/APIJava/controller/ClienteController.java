@@ -50,16 +50,16 @@ public class ClienteController {
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaCliente")
     public ResponseEntity<?> findCliente(@RequestParam("id_cliente") long id_cliente) {
-        List<ClienteDTO> resultado = iCliente.findCustomer(id_cliente).stream()
-                .map(ClienteMapper::toDTO)
-                .toList();
+        ClienteEntity cliente = iCliente.findCustomer(id_cliente);
+        ClienteDTO dto = ClienteMapper.toDTO(cliente);
 
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Cliente(s) encontrado(s) con éxito.")
-                .data(resultado)
+                .message("Cliente encontrado con éxito.")
+                .data(dto)
                 .build(),
                 HttpStatus.OK);
     }
+
 
 
 
