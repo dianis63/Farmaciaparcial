@@ -1,6 +1,8 @@
 package com.farmacia.sanrafael.APIJava.controller;
 
+import com.farmacia.sanrafael.APIJava.dto.ClienteDTO;
 import com.farmacia.sanrafael.APIJava.entities.ClienteEntity;
+import com.farmacia.sanrafael.APIJava.mapper.ClienteMapper;
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import com.farmacia.sanrafael.APIJava.service.ICliente;
 import jakarta.validation.Valid;
@@ -10,39 +12,56 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/process")
 public class ClienteController {
+
     @Autowired
     private ICliente iCliente;
 
     @Transactional(readOnly = true)
     @GetMapping("/clientes")
     public ResponseEntity<?> getClientes() {
+        List<ClienteDTO> clientesDTO = iCliente.findAll().stream()
+                .map(ClienteMapper::toDTO)
+                .toList();
+
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Clientes recuperados con éxito.")
-                .data(iCliente.findAll())
+                .data(clientesDTO)
                 .build(),
                 HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping("/cliente")
-    public ResponseEntity<?> save(@Valid @RequestBody ClienteEntity cliente) {
+    public ResponseEntity<?> saveCliente(@Valid @RequestBody ClienteDTO dto) {
+        ClienteEntity cliente = ClienteMapper.toEntity(dto);
+        ClienteEntity saved = iCliente.save(cliente);
+
         return new ResponseEntity<>(MessageResponse.builder()
-                .message(String.format("Cliente %s %s guardado con éxito.", cliente.getNombre(), cliente.getApellido()))
-                .data(iCliente.save(cliente))
-                .build(),
-                HttpStatus.OK);
+                .message(String.format("Cliente %s %s guardado con éxito.", saved.getNombre(), saved.getApellido()))
+                .data(ClienteMapper.toDTO(saved))
+                .build(), HttpStatus.CREATED);
     }
 
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaCliente")
-    public ResponseEntity<?> findCustomer(@RequestParam("id_cliente") long id_cliente) {
+    public ResponseEntity<?> findCliente(@RequestParam("id_cliente") long id_cliente) {
+        List<ClienteDTO> resultado = iCliente.findCustomer(id_cliente).stream()
+                .map(ClienteMapper::toDTO)
+                .toList();
+
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Cliente encontrado con con éxito.")
-                .data(iCliente.findCustomer(id_cliente))
+                .message("Cliente(s) encontrado(s) con éxito.")
+                .data(resultado)
                 .build(),
                 HttpStatus.OK);
     }
+
+
+
+
 }

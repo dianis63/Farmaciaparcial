@@ -18,8 +18,15 @@ public class ClienteImpl implements ICliente {
     public ClienteEntity save(ClienteEntity cliente) {return clienteRepository.save(cliente);}
 
     @Override
-    public ClienteEntity findCustomer(long id_cliente) {
-        return clienteRepository.Buscarcliente(id_cliente);
+    public List<ClienteEntity> findCustomer(long id_cliente) {
+        ClienteEntity cliente = clienteRepository.Buscarcliente(id_cliente);
+        if (cliente != null) {
+            return List.of(cliente);
+        } else {
+            return List.of();
+        }
     }
+
+
 
 }
