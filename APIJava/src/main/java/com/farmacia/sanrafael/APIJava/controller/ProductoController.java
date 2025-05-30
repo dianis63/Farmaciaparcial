@@ -70,5 +70,46 @@ public class ProductoController {
                 .data(iProducto.buscarPorNombre(nombre))
                 .build(), HttpStatus.OK);
     }
+    @Transactional
+    @PutMapping("/producto/{id}")
+    public ResponseEntity<?> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoDTO dto) {
+        ProductoEntity existingProducto = iProducto.findProduct(id).stream().findFirst().orElse(null);
 
+        if (existingProducto == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Producto no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existingProducto.setNombre(dto.getNombre());
+        existingProducto.setDescripcion(dto.getDescripcion());
+        existingProducto.setPrecio(dto.getPrecio());
+        existingProducto.setStock(dto.getStock());
+        existingProducto.setFecha_vencimiento(dto.getFecha_vencimiento());
+
+        ProductoEntity updated = iProducto.save(existingProducto);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message(String.format("Producto %s actualizado con éxito.", updated.getNombre()))
+                .data(ProductoMapper.toDTO(updated))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/producto/{id}")
+    public ResponseEntity<?> deleteProducto(@PathVariable Long id) {
+        ProductoEntity existingProducto = iProducto.findProduct(id).stream().findFirst().orElse(null);
+
+        if (existingProducto == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Producto no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iProducto.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Producto eliminado con éxito.")
+                .build(), HttpStatus.OK);
+    }
 }

@@ -12,6 +12,7 @@ public interface IProducto {
     List<ProductoEntity> findProduct(long idProducto);
 
     List<ProductoEntity> buscarPorNombre(String nombre);
+    public void delete(long idProducto);
 }
 
 

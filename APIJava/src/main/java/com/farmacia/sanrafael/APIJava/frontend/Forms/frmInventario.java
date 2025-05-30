@@ -175,7 +175,6 @@ public class frmInventario extends JPanel {
         }
     }
 
-
     private void editarProducto() {
         int filaSeleccionada = tblInventario.getSelectedRow();
         if (filaSeleccionada >= 0) {
@@ -189,15 +188,43 @@ public class frmInventario extends JPanel {
 
                 Window parentWindow = SwingUtilities.getWindowAncestor(this);
                 frmInventarioDialog dialog = frmInventarioDialog.mostrarDialogoEditar(parentWindow, id, nombre, cantidad, precio, vencimiento, descripcion);
-
                 if (dialog.wasSaved()) {
+                    ProductoDTO productoActualizado = new ProductoDTO();
+
+                    String nuevoNombre = dialog.getNombre();
+                    int nuevaCantidad = dialog.getCantidad();
+                    double nuevoPrecio = dialog.getPrecio();
+                    Date vencimientoDate = dialog.getVencimiento();
+                    String nuevaDescripcion = dialog.getDescripcion();
+
+                    productoActualizado.setIdProducto((long) id);
+                    productoActualizado.setNombre(nuevoNombre);
+                    productoActualizado.setStock(nuevaCantidad);
+                    productoActualizado.setPrecio(nuevoPrecio);
+                    productoActualizado.setFecha_vencimiento(vencimientoDate);
+                    productoActualizado.setDescripcion(nuevaDescripcion);
+
                     DefaultTableModel model = (DefaultTableModel) tblInventario.getModel();
-                    model.setValueAt(dialog.getNombre(), filaSeleccionada, 1);
-                    model.setValueAt(dialog.getCantidad(), filaSeleccionada, 2);
-                    model.setValueAt(dialog.getPrecio(), filaSeleccionada, 3);
-                    model.setValueAt(dialog.getVencimiento(), filaSeleccionada, 4);
-                    model.setValueAt(dialog.getDescripcion(), filaSeleccionada, 5);
+                    model.setValueAt(nuevoNombre, filaSeleccionada, 1);
+                    model.setValueAt(nuevaCantidad, filaSeleccionada, 2);
+                    model.setValueAt(nuevoPrecio, filaSeleccionada, 3);
+
+                    SimpleDateFormat formatoTabla = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaMostrar = (vencimientoDate != null) ? formatoTabla.format(vencimientoDate) : "";
+                    model.setValueAt(fechaMostrar, filaSeleccionada, 4);
+                    model.setValueAt(nuevaDescripcion, filaSeleccionada, 5);
+
+                    ProductoClient client = new ProductoClient();
+                    try {
+                        ProductoDTO respuesta = client.actualizarProducto(id, productoActualizado);
+                        JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Error al actualizar producto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    }
                 }
+
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al obtener datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
@@ -256,12 +283,17 @@ public class frmInventario extends JPanel {
             );
             if (respuesta == JOptionPane.YES_OPTION) {
 
-
-                // Aquí solo eliminamos de la tabla (frontend), backend falta implementar
-                DefaultTableModel model = (DefaultTableModel) tblInventario.getModel();
-                model.removeRow(filaSeleccionada);
-
-                JOptionPane.showMessageDialog(this, "Producto eliminado", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    long idProducto = Long.parseLong(tblInventario.getValueAt(filaSeleccionada, 0).toString());
+                    ProductoClient client = new ProductoClient();
+                    client.eliminarProducto(idProducto);
+                    DefaultTableModel model = (DefaultTableModel) tblInventario.getModel();
+                    model.removeRow(filaSeleccionada);
+                    JOptionPane.showMessageDialog(this, "Producto eliminado", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Error al eliminar el producto: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);

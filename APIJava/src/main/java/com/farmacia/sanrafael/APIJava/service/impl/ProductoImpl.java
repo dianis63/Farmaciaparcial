@@ -30,4 +30,6 @@ public class ProductoImpl implements IProducto {
         return productoRepository.buscarPorNombre(nombre);
     }
 
+    @Override
+    public void delete(long idProducto) {productoRepository.deleteById(idProducto);}
 }

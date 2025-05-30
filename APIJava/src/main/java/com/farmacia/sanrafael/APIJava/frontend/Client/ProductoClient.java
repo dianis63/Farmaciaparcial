@@ -79,7 +79,35 @@ public class ProductoClient {
 
         return response.getData();
     }
+    // 5. Eliminar producto (DELETE)
+    public void eliminarProducto(long id) throws Exception {
+        URL url = new URL(BASE_URL + "/producto/" + id);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
 
-    // 5. (Futuro) Eliminar producto (DELETE)
-    // 6. (Futuro) Actualizar producto (PUT o POST con ID)
+        int responseCode = conn.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new IOException("Error al eliminar el producto: " + responseCode);
+        }
+    }
+
+    // 6. Actualizar producto (PUT)
+    public ProductoDTO actualizarProducto(long id, ProductoDTO producto) throws Exception {
+        URL url = new URL(BASE_URL + "/producto/" + id);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("PUT");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        OutputStream os = conn.getOutputStream();
+        mapper.writeValue(os, producto);
+        os.flush();
+
+        InputStream inputStream = conn.getInputStream();
+        TypeReference<MessageResponse<ProductoDTO>> typeRef = new TypeReference<>() {
+        };
+        MessageResponse<ProductoDTO> response = mapper.readValue(inputStream, typeRef);
+
+        return response.getData();
+    }
 }
