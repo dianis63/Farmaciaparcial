@@ -18,31 +18,82 @@ public class DetalleVentaController {
 
     @Transactional(readOnly = true)
     @GetMapping("/detalle_ventas")
-    public ResponseEntity<?> getDProductos() {
+    public ResponseEntity<?> getDetallesVentas() {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Detalles de venta recuperados con éxito.")
                 .data(iDetalleventa.findAll())
-                .build(),
-                HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping("/detalle_venta")
-    public ResponseEntity<?> saveProducto(@Valid @RequestBody DetalleVentaEntity detalleventa) {
+    public ResponseEntity<?> saveDetalleVenta(@Valid @RequestBody DetalleVentaEntity detalleVenta) {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Detalle de venta guardado con éxito.")
-                .data(iDetalleventa.save(detalleventa))
-                .build(),
-                HttpStatus.OK);
+                .data(iDetalleventa.save(detalleVenta))
+                .build(), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaDVenta")
-    public ResponseEntity<?> Detalle_VentaN(@RequestParam("id_venta") long id_venta) {
+    public ResponseEntity<?> getDetallesPorVenta(@RequestParam("id_venta") long idVenta) {
         return new ResponseEntity<>(MessageResponse.builder()
-                .message(String.format("Detalle de venta N° %d encontrado con éxito.", id_venta))
-                .data(iDetalleventa.Detalle_VentaN(id_venta))
-                .build(),
-                HttpStatus.OK);
+                .message(String.format("Detalles de la venta N° %d encontrados con éxito.", idVenta))
+                .data(iDetalleventa.Detalle_VentaN(idVenta))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/detalle_venta/{id}")
+    public ResponseEntity<?> getDetallePorId(@PathVariable long id) {
+        DetalleVentaEntity detalle = iDetalleventa.BuscarDVenta(id);
+        if (detalle == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Detalle de venta no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Detalle de venta encontrado con éxito.")
+                .data(detalle)
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/detalle_venta/{id}")
+    public ResponseEntity<?> deleteDetalle(@PathVariable long id) {
+        DetalleVentaEntity detalle = iDetalleventa.BuscarDVenta(id);
+        if (detalle == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Detalle de venta no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iDetalleventa.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Detalle de venta eliminado con éxito.")
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @PutMapping("/detalle_venta/{id}")
+    public ResponseEntity<?> updateDetalle(@PathVariable long id, @Valid @RequestBody DetalleVentaEntity updatedData) {
+        DetalleVentaEntity existing = iDetalleventa.BuscarDVenta(id);
+        if (existing == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Detalle de venta no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existing.setId_producto(updatedData.getId_producto());
+        existing.setCantidad(updatedData.getCantidad());
+
+        DetalleVentaEntity updated = iDetalleventa.save(existing);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Detalle de venta actualizado con éxito.")
+                .data(updated)
+                .build(), HttpStatus.OK);
     }
 }

@@ -25,7 +25,17 @@ public class DetalleVentaImpl implements IDetalleventa {
     }
 
     @Override
+    public DetalleVentaEntity BuscarDVenta(long id_venta) {
+        return DetalleventaRepository.BuscarDVenta(id_venta);
+    }
+
+    @Override
     public List<DetalleVentaEntity> Detalle_VentaN(long id_venta) {
         return DetalleventaRepository.Detalle_VentaN(id_venta);
+    }
+
+    @Override
+    public void delete(long idProducto) {
+        DetalleventaRepository.deleteById(idProducto);
     }
 }

@@ -2,6 +2,8 @@ package com.farmacia.sanrafael.APIJava.controller;
 
 import com.farmacia.sanrafael.APIJava.dto.ProductoDTO;
 import com.farmacia.sanrafael.APIJava.dto.VentasDTO;
+import com.farmacia.sanrafael.APIJava.entities.ClienteEntity;
+import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
 import com.farmacia.sanrafael.APIJava.entities.VentaEntity;
 import com.farmacia.sanrafael.APIJava.mapper.ProductoMapper;
@@ -69,4 +71,45 @@ public class VentaController {
                 .build(),
                 HttpStatus.OK);
     }
+
+    @Transactional
+    @PutMapping("/venta/{id}")
+    public ResponseEntity<?> updateVenta(@PathVariable Long id, @Valid @RequestBody VentasDTO dto) {
+        VentaEntity existingVenta = iVenta.BuscarVenta(id);
+
+        if (existingVenta == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Venta no encontrada.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existingVenta.setTotal(dto.getTotal());
+        existingVenta.setEstado(dto.getEstado());
+
+        VentaEntity updated = iVenta.save(existingVenta);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Venta actualizada con éxito.")
+                .data(VentasMapper.toDTO(updated))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/venta/{id}")
+    public ResponseEntity<?> deleteVenta(@PathVariable Long id) {
+        VentaEntity existingVenta = iVenta.BuscarVenta(id);
+
+        if (existingVenta == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Venta no encontrada.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iVenta.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Venta eliminada con éxito.")
+                .build(), HttpStatus.OK);
+    }
+
 }

@@ -62,7 +62,7 @@ public class ProductoController {
                 HttpStatus.OK);
     }
 
-@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @GetMapping("/buscar")
     public ResponseEntity<?> buscarProductos(@RequestParam String nombre) {
         return new ResponseEntity<>(MessageResponse.builder()
@@ -70,6 +70,7 @@ public class ProductoController {
                 .data(iProducto.buscarPorNombre(nombre))
                 .build(), HttpStatus.OK);
     }
+
     @Transactional
     @PutMapping("/producto/{id}")
     public ResponseEntity<?> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoDTO dto) {
