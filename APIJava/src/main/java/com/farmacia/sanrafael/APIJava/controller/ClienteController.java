@@ -60,6 +60,49 @@ public class ClienteController {
                 HttpStatus.OK);
     }
 
+    @Transactional
+    @PutMapping("/cliente/{id}")
+    public ResponseEntity<?> updateCliente(@PathVariable Long id, @Valid @RequestBody ClienteDTO dto) {
+        ClienteEntity existingCliente = iCliente.findCustomer(id);
+
+        if (existingCliente == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Cliente no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existingCliente.setNombre(dto.getNombre());
+        existingCliente.setApellido(dto.getApellido());
+        existingCliente.setTelefono(dto.getTelefono());
+        existingCliente.setDireccion(dto.getDireccion());
+        existingCliente.setCorreo(dto.getCorreo());
+
+        ClienteEntity updated = iCliente.save(existingCliente);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message(String.format("Cliente %s %s actualizado con éxito.", updated.getNombre(), updated.getApellido()))
+                .data(ClienteMapper.toDTO(updated))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/cliente/{id}")
+    public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
+        ClienteEntity existingCliente = iCliente.findCustomer(id);
+
+        if (existingCliente == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Cliente no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iCliente.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Cliente eliminado con éxito.")
+                .build(), HttpStatus.OK);
+    }
+
 
 
 

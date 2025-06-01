@@ -8,4 +8,5 @@ public interface ICliente {
     ClienteEntity save(ClienteEntity cliente);
     ClienteEntity findCustomer(long id_cliente);
 
+    void delete(Long id_cliente);
 }

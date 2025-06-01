@@ -22,6 +22,9 @@ public class ClienteImpl implements ICliente {
         return clienteRepository.Buscarcliente(id_cliente);
     }
 
+    @Override
+    public void delete(Long id_cliente) {clienteRepository.deleteById(id_cliente);}
+
 
 
 
