@@ -1,6 +1,5 @@
 package com.farmacia.sanrafael.APIJava.service.impl;
 
-import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
 import com.farmacia.sanrafael.APIJava.entities.VentaEntity;
 import com.farmacia.sanrafael.APIJava.repository.VentaRepository;
 import com.farmacia.sanrafael.APIJava.service.IVenta;
@@ -38,4 +37,10 @@ public class VentaImpl implements IVenta {
     public void delete(long idProducto) {
         ventaRepository.deleteById(idProducto);
     }
+
+    @Override
+    public List<VentaEntity> buscarPorFecha(String fecha) {
+        return ventaRepository.buscarPorFechaTexto(fecha);
+    }
+
 }

@@ -19,5 +19,8 @@ public interface VentaRepository extends JpaRepository<VentaEntity, Long> {
     @Query("select e from VentaEntity e where e.id_venta = :id_venta")
     VentaEntity BuscarVenta(@Param("id_venta") long id_venta);
 
+    @Query(value = "SELECT * FROM venta WHERE DATE_FORMAT(fecha, '%d/%m/%Y') LIKE %:fecha%", nativeQuery = true)
+    List<VentaEntity> buscarPorFechaTexto(@Param("fecha") String fecha);
+
 }
 

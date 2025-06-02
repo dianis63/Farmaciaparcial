@@ -105,7 +105,6 @@ public class frmClientes extends JPanel {
         tblClientes = new JTable();
         scroll = new JScrollPane(tblClientes);
         scroll.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        tblClientes.putClientProperty(FlatClientProperties.STYLE, "arc:15;background:#e9f4f3;");
 
         // Aquí quitamos tamaños fijos para que la tabla se adapte al contenedor
         scroll.setPreferredSize(null);

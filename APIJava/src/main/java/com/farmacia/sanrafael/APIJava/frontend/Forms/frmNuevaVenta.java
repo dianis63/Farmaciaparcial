@@ -1,6 +1,5 @@
 package com.farmacia.sanrafael.APIJava.frontend.Forms;
 
-
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.MigLayout;
@@ -11,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
-public class frmNuevaVenta extends JPanel{
+public class frmNuevaVenta extends JPanel {
 
     private JTable tblProductos;
     private JScrollPane scroll;
@@ -41,64 +40,44 @@ public class frmNuevaVenta extends JPanel{
         JPanel panelSuperior = new JPanel(new MigLayout("insets 0", "[][100!][][][70!][]", "[]"));
         panelSuperior.setBackground(new Color(172, 212, 227));
 
-        // Campo para ID Cliente con botón
         panelSuperior.add(new JLabel("ID Cliente:"), "gapright 5");
         txtClienteId = new JTextField();
         txtClienteId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "ID Cliente");
-        txtClienteId.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:3,5,3,5;");
+        txtClienteId.putClientProperty(FlatClientProperties.STYLE, "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:3,5,3,5;");
         panelSuperior.add(txtClienteId, "w 100!");
 
         btnAgregarCliente = new JButton("Agregar");
         btnAgregarCliente.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
         panelSuperior.add(btnAgregarCliente, "gapleft 4, w 80!");
+        btnAgregarCliente.addActionListener(e -> frmSeleccionarCliente.mostrarDialogo(SwingUtilities.getWindowAncestor(this)));
 
-        btnAgregarCliente.addActionListener(e -> {
-            frmSeleccionarCliente.mostrarDialogo(
-                    SwingUtilities.getWindowAncestor(frmNuevaVenta.this)
-            );
-        });
-
-        // Campo para ID Empleado con botón
         panelSuperior.add(new JLabel("ID Empleado:"), "gapleft 20, gapright 5");
         txtEmpleadoId = new JTextField();
         txtEmpleadoId.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "ID Empleado");
-        txtEmpleadoId.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:3,5,3,5;");
+        txtEmpleadoId.putClientProperty(FlatClientProperties.STYLE, "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:3,5,3,5;");
         panelSuperior.add(txtEmpleadoId, "w 100!");
 
         btnAgregarEmpleado = new JButton("Agregar");
         btnAgregarEmpleado.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
         panelSuperior.add(btnAgregarEmpleado, "gapleft 34, w 80!");
-
-        btnAgregarEmpleado.addActionListener(e -> {
-            frmSeleccionarEmpleado.mostrarDialogo(
-                    SwingUtilities.getWindowAncestor(frmNuevaVenta.this)
-            );
-        });
+        btnAgregarEmpleado.addActionListener(e -> frmSeleccionarEmpleado.mostrarDialogo(SwingUtilities.getWindowAncestor(this)));
 
         add(panelSuperior, "growx, wrap");
 
-        // Barra de búsqueda y botones para productos
+        // Panel búsqueda
         JPanel panelBusqueda = new JPanel(new MigLayout("fillx, insets 0", "[grow][][][]", "[]"));
         panelBusqueda.setBackground(new Color(172, 212, 227));
 
         txtBuscar = new JTextField();
         txtBuscar.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Buscar producto...");
         txtBuscar.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("Icon/iconoBuscar.svg"));
-        txtBuscar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:5,20,5,20;");
+        txtBuscar.putClientProperty(FlatClientProperties.STYLE, "background: #e9f4f3; arc:15; borderWidth:0; focusWidth:0; margin:5,20,5,20;");
         panelBusqueda.add(txtBuscar, "growx");
 
         btnAgregarProducto = new JButton("Agregar");
         btnAgregarProducto.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
+        btnAgregarProducto.addActionListener(e -> frmSeleccionarProductos.mostrarDialogo(SwingUtilities.getWindowAncestor(this)));
         panelBusqueda.add(btnAgregarProducto, "gapleft 10");
-
-        btnAgregarProducto.addActionListener(e -> {
-            frmSeleccionarProductos.mostrarDialogo(
-                    SwingUtilities.getWindowAncestor(frmNuevaVenta.this)
-            );
-        });
 
         btnEditarProducto = new JButton("Editar");
         btnEditarProducto.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
@@ -110,16 +89,14 @@ public class frmNuevaVenta extends JPanel{
 
         add(panelBusqueda, "growx, wrap");
 
-        // Tabla de productos
+        // Tabla productos
         tblProductos = new JTable();
         scroll = new JScrollPane(tblProductos);
         scroll.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tblProductos.putClientProperty(FlatClientProperties.STYLE, "background: #e9f4f3;");
-        scroll.setPreferredSize(new Dimension(1300, 610));
-        scroll.setMinimumSize(new Dimension(1300, 610));
-        scroll.setMaximumSize(new Dimension(1300, 610));
+        add(scroll, "grow, push, span, wrap");
 
-        // Modelo de tabla
+        // Modelo tabla
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"ID Producto", "Nombre", "Laboratorio", "Precio/U", "Cantidad", "Subtotal"}
@@ -129,28 +106,16 @@ public class frmNuevaVenta extends JPanel{
                 return false;
             }
         };
-
         tblProductos.setModel(model);
         configurarEncabezadoTabla();
         tblProductos.setRowHeight(30);
         tblProductos.setShowHorizontalLines(true);
         tblProductos.setGridColor(new Color(200, 200, 200));
-        tblProductos.getTableHeader().putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#ccdddc; font:bold +2");
+        tblProductos.getTableHeader().putClientProperty(FlatClientProperties.STYLE, "background:#ccdddc; font:bold +2");
         tblProductos.getTableHeader().setReorderingAllowed(false);
         tblProductos.getTableHeader().setResizingAllowed(false);
 
-        // Ajustar anchos de columnas
-        tblProductos.getColumnModel().getColumn(0).setPreferredWidth(65);
-        tblProductos.getColumnModel().getColumn(1).setPreferredWidth(200);
-        tblProductos.getColumnModel().getColumn(2).setPreferredWidth(200);
-        tblProductos.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tblProductos.getColumnModel().getColumn(4).setPreferredWidth(100);
-        tblProductos.getColumnModel().getColumn(5).setPreferredWidth(100);
-
-        add(scroll, "grow, push, wrap");
-
-        // Panel inferior con total y botón Guardar
+        // Panel inferior
         JPanel panelInferior = new JPanel(new MigLayout("fillx, insets 0", "[grow][]", "[]"));
         panelInferior.setBackground(new Color(172, 212, 227));
 
@@ -159,13 +124,12 @@ public class frmNuevaVenta extends JPanel{
         panelInferior.add(lblTotal);
 
         btnGuardarVenta = new JButton("Guardar Venta");
-        btnGuardarVenta.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#a5d6a7; foreground:#1b5e20; font:bold");
+        btnGuardarVenta.putClientProperty(FlatClientProperties.STYLE, "background:#a5d6a7; foreground:#1b5e20; font:bold");
         panelInferior.add(btnGuardarVenta, "gapleft 10, align right");
 
-        add(panelInferior, "growx");
+        add(panelInferior, "growx, wrap");
 
-        // Datos de prueba y cálculo inicial del total
+        // Datos de prueba y total
         agregarDatosPrueba();
         calcularTotal();
     }
@@ -173,14 +137,14 @@ public class frmNuevaVenta extends JPanel{
     private void configurarEncabezadoTabla() {
         JTableHeader header = tblProductos.getTableHeader();
         DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
-        renderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda
-        header.setFont(header.getFont().deriveFont(Font.BOLD, 14)); // Estilo de fuente
+        renderer.setHorizontalAlignment(SwingConstants.LEFT);
+        header.setFont(header.getFont().deriveFont(Font.BOLD, 14));
     }
 
     private void agregarDatosPrueba() {
         DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
         model.addRow(new Object[]{1, "Acetaminofén", "MK", 1.50, 3, 4.50});
-        model.addRow(new Object[]{2, "Amoxicilina", "MK",  2.75, 2, 5.50});
+        model.addRow(new Object[]{2, "Amoxicilina", "MK", 2.75, 2, 5.50});
     }
 
     private void calcularTotal() {
@@ -189,17 +153,10 @@ public class frmNuevaVenta extends JPanel{
 
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
-                // Obtener precio (columna 3) y cantidad (columna 4)
                 double precio = Double.parseDouble(model.getValueAt(i, 3).toString());
                 int cantidad = Integer.parseInt(model.getValueAt(i, 4).toString());
-
-                // Calcular subtotal
                 double subtotal = precio * cantidad;
-
-                // Actualizar el valor del subtotal en la tabla (columna 5)
                 model.setValueAt(subtotal, i, 5);
-
-                // Sumar al total
                 total += subtotal;
             } catch (NumberFormatException e) {
                 System.err.println("Error en formato numérico en la fila " + i);

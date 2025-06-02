@@ -39,7 +39,7 @@ public class frmInventario extends JPanel {
         add(lblTitulo, "wrap, align left");
 
         txtBuscar = new JTextField();
-        txtBuscar.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Buscar...");
+        txtBuscar.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Buscar por Nombre de Producto...");
         txtBuscar.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("Icon/iconoBuscar.svg"));
         txtBuscar.putClientProperty(FlatClientProperties.STYLE, "" + "background: #e9f4f3;" + "foreground: #000000;" + "arc:15;" + "borderWidth:0;" + "focusWidth:0;" + "innerFocusWidth:0;" + "margin:5,20,5,20;");
         txtBuscar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {

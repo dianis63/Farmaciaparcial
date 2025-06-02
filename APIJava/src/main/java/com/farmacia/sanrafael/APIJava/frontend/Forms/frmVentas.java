@@ -1,6 +1,8 @@
 package com.farmacia.sanrafael.APIJava.frontend.Forms;
 
-
+import com.farmacia.sanrafael.APIJava.frontend.Client.VentaClient;
+import com.farmacia.sanrafael.APIJava.frontend.models.DetalleVentasDTO;
+import com.farmacia.sanrafael.APIJava.frontend.models.VentasDTO;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.MigLayout;
@@ -10,6 +12,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class frmVentas extends JPanel {
 
@@ -17,7 +21,7 @@ public class frmVentas extends JPanel {
     private JScrollPane scroll;
     private JTextField txtBuscar;
     private JLabel lblTitulo;
-    private JButton btnAgregar, btnEditar, btnEliminar;
+    private JButton btnEditar, btnEliminar;
 
     public frmVentas() {
         init();
@@ -25,79 +29,94 @@ public class frmVentas extends JPanel {
     }
 
     private void init() {
-        // Usar MigLayout en el panel principal
         setLayout(new MigLayout("fill, insets 20", "[grow]", "[][grow]"));
         setBackground(new Color(172, 212, 227));
 
         // Título
         lblTitulo = new JLabel("VENTAS");
         lblTitulo.putClientProperty(FlatClientProperties.STYLE, "font:bold +7;");
-        add(lblTitulo, "wrap, align left"); // "wrap" para pasar a la siguiente fila
+        add(lblTitulo, "wrap, align left");
 
         // Barra de búsqueda y botones
         txtBuscar = new JTextField();
-        txtBuscar.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Buscar...");
+        txtBuscar.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Buscar por Fecha...");
         txtBuscar.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("Icon/iconoBuscar.svg"));
-        txtBuscar.putClientProperty(FlatClientProperties.STYLE, ""
-                + "background: #e9f4f3;"  // Color de fondo más oscuro
-                + "foreground: #000000;"  // Color del texto (blanco)
-                + "arc:15;"               // Bordes redondeados
-                + "borderWidth:0;"        // Sin borde
-                + "focusWidth:0;"         // Sin borde al enfocarse
-                + "innerFocusWidth:0;"    // Sin borde interno al enfocarse
-                + "margin:5,20,5,20;");
+        txtBuscar.putClientProperty(FlatClientProperties.STYLE, "" + "background: #e9f4f3;" + "foreground: #000000;" + "arc:15;" + "borderWidth:0;" + "focusWidth:0;" + "innerFocusWidth:0;" + "margin:5,20,5,20;");
+        txtBuscar.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                mostrarVentas();
+            }
 
-        btnAgregar = new JButton("Agregar");
-        btnAgregar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#e9f4f3;");
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                mostrarVentas();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                mostrarVentas();
+            }
+        });
+
         btnEditar = new JButton("Editar");
-        btnEditar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#e9f4f3;");
+        btnEditar.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
+        btnEditar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "No se puede modificar una venta finalizada.", "Acción no permitida", JOptionPane.WARNING_MESSAGE);
+        });
+
         btnEliminar = new JButton("Eliminar");
-        btnEliminar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#e9f4f3;");
+        btnEliminar.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
+        btnEliminar = new JButton("Eliminar");
+        btnEliminar.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
+        btnEliminar.addActionListener(e -> {
+            int filaSeleccionada = tblVentas.getSelectedRow();
+            if (filaSeleccionada >= 0) {
+                long idVenta = (long) tblVentas.getValueAt(filaSeleccionada, 0);
+                int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas eliminar esta venta?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        VentaClient cliente = new VentaClient();
+                        cliente.eliminarVenta(idVenta);
+                        JOptionPane.showMessageDialog(this, "Venta eliminada con éxito.");
+                        mostrarVentas(); // Refresca la tabla
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Error al eliminar la venta: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Seleccione una venta primero.");
+            }
+        });
 
-        // Panel para la barra de búsqueda y botones
-        JPanel topPanel = new JPanel(new MigLayout("fill, insets 0", "[grow][][]", "[]"));
-        topPanel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#acd4e3;");
+        JPanel topPanel = new JPanel(new MigLayout("fillx, insets 5", "[grow][][][]", "[]"));
+        topPanel.putClientProperty(FlatClientProperties.STYLE, "background:#acd4e3;");
+        topPanel.add(txtBuscar, "growx, pushx, wmin 150");
+        topPanel.add(btnEditar, "gapleft 10");
+        topPanel.add(btnEliminar, "gapleft 10, wrap");
 
-        topPanel.add(txtBuscar, "grow, push"); // La barra de búsqueda crece y empuja los botones
-        topPanel.add(btnAgregar, "gapleft 10"); // Espacio a la izquierda del botón Agregar
-        topPanel.add(btnEditar, "gapleft 10"); // Espacio a la izquierda del botón Editar
-        topPanel.add(btnEliminar, "gapleft 10, wrap"); // Espacio a la izquierda del botón Eliminar
+        add(topPanel, "grow, wrap");
 
-        add(topPanel, "grow, wrap"); // Añadir el topPanel en la parte superior
-
-        // Tabla de inventario
+        // Tabla de ventas
         tblVentas = new JTable();
         scroll = new JScrollPane(tblVentas);
         scroll.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        scroll.setPreferredSize(null);
 
-        // Permitir redimensionamiento manual del JScrollPane
-        scroll.setPreferredSize(new Dimension(1300, 675)); // Tamaño inicial
-        scroll.setMinimumSize(new Dimension(1300, 675));   // Tamaño mínimo
-        scroll.setMaximumSize(new Dimension(1300, 675));  // Tamaño máximo
-
-        // Configurar la tabla
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[][]{},
-                new String[]{"ID VENTA", "ID USUARIO", "ID EMPLEADO", "TOTAL", "FECHA", "ESTADO", "DETALLE"} // Nueva columna "DETALLE"
-        ) {
+        DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new String[]{"ID VENTA", "CLIENTE", "EMPLEADO", "FECHA VENTA", "ESTADO", "TOTAL", "DETALLE"}) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 6) { // La columna "DETALLE" contendrá botones
-                    return JButton.class;
-                }
+                if (columnIndex == 6) return JButton.class;
                 return Object.class;
             }
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return columnIndex == 6; // Solo la columna "DETALLE" será editable (para el botón)
+                return columnIndex == 6;
             }
         };
 
+        tblVentas.setModel(model);
         tblVentas.setDefaultRenderer(JButton.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -108,7 +127,6 @@ public class frmVentas extends JPanel {
             }
         });
 
-// Editor para manejar los clics en el botón
         tblVentas.setDefaultEditor(JButton.class, new DefaultCellEditor(new JCheckBox()) {
             @Override
             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
@@ -119,75 +137,102 @@ public class frmVentas extends JPanel {
             }
         });
 
-        tblVentas.setModel(model);
         tblVentas.getTableHeader().setReorderingAllowed(false);
         tblVentas.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tblVentas.setRowHeight(30);
+        tblVentas.setShowHorizontalLines(true);
+        tblVentas.setShowVerticalLines(false);
+        tblVentas.setGridColor(new Color(200, 200, 200));
 
-        // Ajustar el ancho de las columnas
+        // Ajuste de columnas
         tblVentas.getColumnModel().getColumn(0).setPreferredWidth(65);
         tblVentas.getColumnModel().getColumn(1).setPreferredWidth(65);
         tblVentas.getColumnModel().getColumn(2).setPreferredWidth(65);
         tblVentas.getColumnModel().getColumn(3).setPreferredWidth(155);
         tblVentas.getColumnModel().getColumn(4).setPreferredWidth(155);
         tblVentas.getColumnModel().getColumn(5).setPreferredWidth(155);
-        tblVentas.getColumnModel().getColumn(5).setPreferredWidth(155);
+        tblVentas.getColumnModel().getColumn(6).setPreferredWidth(120); // Detalle
 
-        // Alinear los títulos de las columnas a la izquierda
         JTableHeader header = tblVentas.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 14));
         DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
-        renderer.setHorizontalAlignment(SwingConstants.LEFT); // Alinear a la izquierda
-        header.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#ccdddc;");
+        renderer.setHorizontalAlignment(SwingConstants.LEFT);
+        header.putClientProperty(FlatClientProperties.STYLE, "background:#ccdddc;");
 
-        // Añadir la tabla al panel
-        add(scroll, "grow, push"); // La tabla ocupa todo el espacio restante
+        add(scroll, "grow, push");
 
-        tblVentas.setRowHeight(30); // Ajusta este valor según necesites
-
-        tblVentas.setShowHorizontalLines(true);
-        tblVentas.setShowVerticalLines(false); // Puedes mantener las verticales ocultas si prefieres
-        tblVentas.setGridColor(new Color(200, 200, 200)); // Color gris claro para las líneas
-        // Añadir datos de prueba
-        testData();
+        mostrarVentas();
     }
 
-    private void testData() {
+    private void mostrarVentas() {
+        String filtro = txtBuscar.getText().trim();
         DefaultTableModel model = (DefaultTableModel) tblVentas.getModel();
+        model.setRowCount(0);
 
-        // Datos de ejemplo
-        Object[] row1 = {1, 1, 1, "$25.50", "24/03/25", "finalizado", crearBotonDetalle(1)};
-        Object[] row2 = {2, 2, 2, "$50.00", "25/03/25", "pendiente", crearBotonDetalle(2)};
+        try {
+            VentaClient cliente = new VentaClient();
+            List<VentasDTO> lista;
 
-        model.addRow(row1);
-        model.addRow(row2);
+            if (filtro.isEmpty()) {
+                lista = cliente.obtenerVentas();
+            } else {
+                lista = cliente.buscarPorFecha(filtro);
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            for (VentasDTO v : lista) {
+                String fechaFormateada = v.getFecha() != null ? sdf.format(v.getFecha()) : "";
+                String estadoFormateado = "A".equalsIgnoreCase(v.getEstado()) ? "Activo" : "Cancelado";
+                JButton btnDetalle = crearBotonDetalle(v.getid_venta());
+
+                model.addRow(new Object[]{
+                        v.getid_venta(),
+                        v.getNombre_cliente(),
+                        v.getNombre_empleado(),
+                        fechaFormateada,
+                        estadoFormateado,
+                        "$" + v.getTotal(),
+                        btnDetalle
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar ventas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
-    private JButton crearBotonDetalle(int idVenta) {
+    private JButton crearBotonDetalle(long idVenta) {
         JButton btnDetalle = new JButton("Ver Detalle");
-        btnDetalle.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:#e9f4f3;");
+        btnDetalle.putClientProperty(FlatClientProperties.STYLE, "background:#e9f4f3;");
 
         btnDetalle.addActionListener(e -> {
-            // Abrir el formulario de detalle con el ID de la venta
-            abrirDetalleVenta(idVenta);
+            try {
+                VentaClient cliente = new VentaClient();
+                List<DetalleVentasDTO> detalles = cliente.obtenerDetalleVenta(idVenta);
+
+                String[] columnas = {"Producto", "Cantidad", "Precio"};
+                DefaultTableModel detalleModel = new DefaultTableModel(columnas, 0);
+
+                for (DetalleVentasDTO d : detalles) {
+                    detalleModel.addRow(new Object[]{d.getNombre_producto(), d.getcantidad(), "$" + d.getprecio_unitario()});
+                }
+
+                JTable detalleTable = new JTable(detalleModel);
+                detalleTable.setEnabled(false);
+                JScrollPane scrollPane = new JScrollPane(detalleTable);
+                scrollPane.setPreferredSize(new Dimension(400, 200));
+
+                JOptionPane.showMessageDialog(this, scrollPane, "Detalle de Venta - ID: " + idVenta, JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al obtener detalle de venta: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
         });
 
         return btnDetalle;
     }
 
-    private void abrirDetalleVenta(int idVenta) {
-        Container parentContainer = this.getParent();
-        parentContainer.remove(this);
-
-        // Usamos el constructor sin parámetros por ahora
-        frmDetalleVentas detallePanel = new frmDetalleVentas();
-        parentContainer.add(detallePanel);
-
-        parentContainer.revalidate();
-        parentContainer.repaint();
-
-        // Opcional: Mostrar el ID en consola para verificar que funciona
-        System.out.println("Venta seleccionada ID: " + idVenta);
-    }
 }

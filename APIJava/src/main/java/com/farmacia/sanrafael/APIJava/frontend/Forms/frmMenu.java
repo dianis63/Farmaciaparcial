@@ -1,6 +1,5 @@
 package com.farmacia.sanrafael.APIJava.frontend.Forms;
 
-import com.farmacia.sanrafael.APIJava.frontend.Manager.FrmsManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.MigLayout;

@@ -13,5 +13,8 @@ public interface IVenta {
     List<VentaEntity> VentasMayoresA(double totalm);
 
     void delete(long idVenta);
+
+    List<VentaEntity> buscarPorFecha(String fecha);
+
 }
 

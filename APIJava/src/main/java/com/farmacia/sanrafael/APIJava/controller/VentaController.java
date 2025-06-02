@@ -19,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -112,4 +115,35 @@ public class VentaController {
                 .build(), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/venta/{id}")
+    public ResponseEntity<?> getVentaById(@PathVariable Long id) {
+        VentaEntity venta = iVenta.BuscarVenta(id);
+
+        if (venta == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Venta no encontrada.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Venta recuperada con éxito.")
+                .data(VentasMapper.toDTO(venta))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/buscarv")
+    public ResponseEntity<?> getVentasPorFecha(@RequestParam("fecha") String fecha) {
+        List<VentaEntity> ventas = iVenta.buscarPorFecha(fecha);
+
+        List<VentasDTO> dtos = ventas.stream()
+                .map(VentasMapper::toDTO)
+                .toList();
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message(String.format("Ventas del día %s recuperadas.", fecha))
+                .data(dtos)
+                .build(), HttpStatus.OK);
+    }
 }
