@@ -42,7 +42,7 @@ public class IngresoController {
         IngresoEntity saved = iIngreso.save(ingreso);
 
         return new ResponseEntity<>(MessageResponse.builder()
-                .message(String.format("Ingreso %s %s guardado con éxito.", saved.getId_ingreso(), saved.getPrecio_compra()))
+                .message(String.format("Ingreso %s con el precio de compra de $%s guardado con éxito.", saved.getId_ingreso(), saved.getPrecio_compra()))
                 .data(IngresoMapper.toDTO(saved))
                 .build(),
                 HttpStatus.OK);
@@ -60,5 +60,48 @@ public class IngresoController {
                 .data(ingreso)
                 .build(),
                 HttpStatus.OK);
+    }
+
+    @Transactional
+    @PutMapping("/ingreso/{id}")
+    public ResponseEntity<?> updateIngreso(@PathVariable Long id, @Valid @RequestBody IngresoDTO dto) {
+        IngresoEntity existingIngreso = iIngreso.findById(id).stream().findFirst().orElse(null);
+
+        if (existingIngreso == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Ingreso no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existingIngreso.setId_producto(dto.getId_producto());
+        existingIngreso.setCantidad(dto.getCantidad());
+        existingIngreso.setPrecio_compra(dto.getPrecio_compra());
+        existingIngreso.setFecha_ingreso(dto.getFecha_ingreso());
+        existingIngreso.setId_empleado(dto.getId_empleado());
+
+        IngresoEntity updated = iIngreso.save(existingIngreso);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message(String.format("Ingreso %s actualizado con éxito.", updated.getId_ingreso()))
+                .data(IngresoMapper.toDTO(updated))
+                .build(), HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/ingreso/{id}")
+    public ResponseEntity<?> deleteIngreso(@PathVariable Long id) {
+        IngresoEntity existingIngreso = iIngreso.findById(id).stream().findFirst().orElse(null);
+
+        if (existingIngreso == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Ingreso no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iIngreso.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Ingreso eliminado con éxito.")
+                .build(), HttpStatus.OK);
     }
 }

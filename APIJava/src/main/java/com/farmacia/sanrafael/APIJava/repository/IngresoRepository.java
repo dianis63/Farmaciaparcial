@@ -12,4 +12,8 @@ public interface IngresoRepository extends JpaRepository<IngresoEntity, Long> {
 
     @Query("select i from IngresoEntity i where i.cantidad < :cantidad")
     List<IngresoEntity> findQuantity(@Param("cantidad")Integer cantidad);
+
+    @Query("select i from IngresoEntity i where i.id_ingreso = :id_ingreso")
+    List<IngresoEntity> findByIdIngreso(@Param("id_ingreso") Long id_ingreso);
+
 }
