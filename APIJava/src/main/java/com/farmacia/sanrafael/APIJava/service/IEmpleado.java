@@ -9,4 +9,5 @@ public interface IEmpleado {
     List<EmpleadoEntity> findAll();
     EmpleadoEntity save(EmpleadoEntity empleado);
     EmpleadoEntity findEmployee(long id_empleado);
+    void delete(Long id_empleado);
 }

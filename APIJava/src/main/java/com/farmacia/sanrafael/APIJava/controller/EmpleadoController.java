@@ -1,5 +1,7 @@
 package com.farmacia.sanrafael.APIJava.controller;
 
+import com.farmacia.sanrafael.APIJava.dto.EmpleadoDTO;
+import com.farmacia.sanrafael.APIJava.mapper.EmpleadoMapper;
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -37,13 +39,49 @@ public class EmpleadoController {
                 HttpStatus.OK);
     }
 
-    @Transactional(readOnly = true)
-    @GetMapping("/ConsultaEmpleado")
-    public ResponseEntity<?> findEmployee(@RequestParam ("id_empleado") long id_empleado) {
+
+
+    @Transactional
+    @PutMapping("/empleado/{id}")
+    public ResponseEntity<?> updateEmpleado(@PathVariable Long id, @Valid @RequestBody EmpleadoDTO dto) {
+        EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
+
+        if (existingEmpleado == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Empleado no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        existingEmpleado.setNombre(dto.getNombre());
+        existingEmpleado.setApellido(dto.getApellido());
+        existingEmpleado.setTelefono(dto.getTelefono());
+        existingEmpleado.setCorreo(dto.getCorreo());
+        existingEmpleado.setCargo(dto.getCargo());
+
+        EmpleadoEntity updated = iEmpleado.save(existingEmpleado);
+
         return new ResponseEntity<>(MessageResponse.builder()
-                .message("Empleado encontrado con éxito.")
-                .data(iEmpleado.findEmployee(id_empleado))
-                .build(),
-                HttpStatus.OK);
+                .message(String.format("Empleado %s %s actualizado con éxito.", updated.getNombre(), updated.getApellido()))
+                .data(EmpleadoMapper.toDTO(updated))
+                .build(), HttpStatus.OK);
+    }
+
+
+    @Transactional
+    @DeleteMapping("/empleado/{id}")
+    public ResponseEntity<?> deleteEmpleado(@PathVariable Long id) {
+        EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
+
+        if (existingEmpleado == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Empleado no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+
+        iEmpleado.delete(id);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Empleado eliminado con éxito.")
+                .build(), HttpStatus.OK);
     }
 }
