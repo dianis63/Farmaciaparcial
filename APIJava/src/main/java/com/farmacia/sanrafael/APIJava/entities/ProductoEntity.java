@@ -42,11 +42,4 @@ public class ProductoEntity {
     @Column(columnDefinition = "DATE")
     private Date fecha_vencimiento;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.PERSIST)
-    private List<DetalleVentaEntity> detallesVenta;
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.PERSIST)
-    private List<IngresoEntity> ingresos;
-
-
 }
