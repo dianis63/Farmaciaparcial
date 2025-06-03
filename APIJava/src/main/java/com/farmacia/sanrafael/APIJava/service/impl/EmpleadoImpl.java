@@ -10,6 +10,8 @@ public class EmpleadoImpl implements IEmpleado {
 
     @Autowired
     private EmpleadoRepository EmpleadoRepository;
+    @Autowired
+    private EmpleadoRepository empleadoRepository;
 
 
     @Override
@@ -27,4 +29,6 @@ public class EmpleadoImpl implements IEmpleado {
         return EmpleadoRepository.Buscarempleado(id_empleado);
     }
 
+    @Override
+    public void delete(Long id_empleado) {empleadoRepository.deleteById(id_empleado);}
 }
