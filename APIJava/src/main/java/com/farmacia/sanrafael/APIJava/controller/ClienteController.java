@@ -47,6 +47,18 @@ public class ClienteController {
                 .build(), HttpStatus.CREATED);
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/ConsultaCliente")
+    public ResponseEntity<?> findCliente(@RequestParam("id_cliente") long id_cliente) {
+        ClienteEntity cliente = iCliente.findCustomer(id_cliente);
+        ClienteDTO dto = ClienteMapper.toDTO(cliente);
+
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Cliente encontrado con éxito.")
+                .data(dto)
+                .build(),
+                HttpStatus.OK);
+    }
 
     @Transactional
     @PutMapping("/cliente/{id}")
