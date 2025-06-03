@@ -103,8 +103,4 @@ public class ClienteController {
                 .build(), HttpStatus.OK);
     }
 
-
-
-
-
 }

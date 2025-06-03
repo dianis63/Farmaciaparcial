@@ -1,12 +1,7 @@
 package com.farmacia.sanrafael.APIJava.controller;
 
-import com.farmacia.sanrafael.APIJava.dto.ProductoDTO;
 import com.farmacia.sanrafael.APIJava.dto.VentasDTO;
-import com.farmacia.sanrafael.APIJava.entities.ClienteEntity;
-import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
-import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
 import com.farmacia.sanrafael.APIJava.entities.VentaEntity;
-import com.farmacia.sanrafael.APIJava.mapper.ProductoMapper;
 import com.farmacia.sanrafael.APIJava.mapper.VentasMapper;
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import com.farmacia.sanrafael.APIJava.service.ICliente;
@@ -19,9 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController

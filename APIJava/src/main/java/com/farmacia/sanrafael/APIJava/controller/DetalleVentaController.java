@@ -34,6 +34,7 @@ public class DetalleVentaController {
                 .build(), HttpStatus.OK);
     }
 
+
     @Transactional(readOnly = true)
     @GetMapping("/ConsultaDVenta")
     public ResponseEntity<?> getDetallesPorVenta(@RequestParam("id_venta") long idVenta) {
