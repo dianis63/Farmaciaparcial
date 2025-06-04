@@ -1,7 +1,9 @@
 package com.farmacia.sanrafael.APIJava.controller;
 
 import com.farmacia.sanrafael.APIJava.dto.IngresoDTO;
+import com.farmacia.sanrafael.APIJava.entities.EmpleadoEntity;
 import com.farmacia.sanrafael.APIJava.entities.IngresoEntity;
+import com.farmacia.sanrafael.APIJava.entities.ProductoEntity;
 import com.farmacia.sanrafael.APIJava.mapper.IngresoMapper;
 import com.farmacia.sanrafael.APIJava.payload.MessageResponse;
 import com.farmacia.sanrafael.APIJava.service.IIngreso;
@@ -73,11 +75,30 @@ public class IngresoController {
                     .build(), HttpStatus.NOT_FOUND);
         }
 
-        existingIngreso.setId_producto(dto.getId_producto());
+
         existingIngreso.setCantidad(dto.getCantidad());
         existingIngreso.setPrecio_compra(dto.getPrecio_compra());
         existingIngreso.setFecha_ingreso(dto.getFecha_ingreso());
-        existingIngreso.setId_empleado(dto.getId_empleado());
+
+        existingIngreso.setCantidad(dto.getCantidad());
+        existingIngreso.setPrecio_compra(dto.getPrecio_compra());
+        existingIngreso.setFecha_ingreso(dto.getFecha_ingreso());
+
+        if (dto.getId_producto() != null &&
+                (existingIngreso.getProducto() == null ||
+                        !existingIngreso.getProducto().getIdProducto().equals(dto.getId_producto()))) {
+            ProductoEntity producto = new ProductoEntity();
+            producto.setIdProducto(dto.getId_producto());
+            existingIngreso.setProducto(producto);
+        }
+
+        if (dto.getId_empleado() != null &&
+                (existingIngreso.getEmpleado() == null ||
+                        !existingIngreso.getEmpleado().getId_empleado().equals(dto.getId_empleado()))) {
+            EmpleadoEntity empleado = new EmpleadoEntity();
+            empleado.setId_empleado(dto.getId_empleado());
+            existingIngreso.setEmpleado(empleado);
+        }
 
         IngresoEntity updated = iIngreso.save(existingIngreso);
 

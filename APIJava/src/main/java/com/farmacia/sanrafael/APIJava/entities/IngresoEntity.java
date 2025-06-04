@@ -18,9 +18,10 @@ public class IngresoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_ingreso;
 
-    @Column(columnDefinition = "INT", nullable = false)
-    @NotNull(message = "El id del producto no puede ser nulo.")
-    private Long id_producto;
+    @ManyToOne
+    @JoinColumn(name = "id_producto", nullable = false)
+    @NotNull(message = "El producto no puede ser nulo.")
+    private ProductoEntity producto;
 
     @Column(columnDefinition = "INT", nullable = false)
     @NotNull(message = "La cantidad no puede ser nula.")
@@ -36,7 +37,8 @@ public class IngresoEntity {
     @Column(columnDefinition = "DATE", nullable = false)
     private Date fecha_ingreso = new Date();
 
-    @Column(columnDefinition = "INT", nullable = false)
-    @NotNull(message = "El id del empleado no puede ser nulo.")
-    private Long id_empleado;
+    @ManyToOne
+    @JoinColumn(name = "id_empleado", nullable = false)
+    @NotNull(message = "El empleado no puede ser nulo.")
+    private EmpleadoEntity empleado;
 }
