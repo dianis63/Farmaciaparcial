@@ -59,7 +59,7 @@ public class EmpleadoController {
 
 
     @Transactional
-    @PutMapping("/EditarEmpleado/{id}")
+    @PutMapping("/empleado/{id}")
     public ResponseEntity<?> updateEmpleado(@PathVariable Long id, @Valid @RequestBody EmpleadoDTO dto) {
         EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
 
@@ -85,7 +85,7 @@ public class EmpleadoController {
 
 
     @Transactional
-    @DeleteMapping("/EliminarEmpleado/{id}")
+    @DeleteMapping("/empleado/{id}")
     public ResponseEntity<?> deleteEmpleado(@PathVariable Long id) {
         EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
 
