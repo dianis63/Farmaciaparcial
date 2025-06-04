@@ -20,7 +20,7 @@ public class EmpleadoController {
     private IEmpleado iEmpleado;
 
     @Transactional(readOnly = true)
-    @GetMapping("/empleados")
+    @GetMapping("/EmpleadosExistentes")
     public ResponseEntity<?> getEmpleados() {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Empleados recuperados con éxito.")
@@ -29,8 +29,23 @@ public class EmpleadoController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/ConsultaEmpleado/{id}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getEmpleadoById(@PathVariable Long id) {
+        EmpleadoEntity empleado = iEmpleado.findEmployee(id);
+        if (empleado == null) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message("Empleado no encontrado.")
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(MessageResponse.builder()
+                .message("Empleado encontrado con éxito.")
+                .data(EmpleadoMapper.toDTO(empleado))
+                .build(), HttpStatus.OK);
+    }
+
     @Transactional
-    @PostMapping("/empleado")
+    @PostMapping("/CreaaEmpleado")
     public ResponseEntity<?> save(@Valid @RequestBody EmpleadoEntity empleado) {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message(String.format("Empleado %s %s guardado con éxito.", empleado.getNombre(), empleado.getApellido()))
@@ -42,7 +57,7 @@ public class EmpleadoController {
 
 
     @Transactional
-    @PutMapping("/empleado/{id}")
+    @PutMapping("/EditarEmpleado/{id}")
     public ResponseEntity<?> updateEmpleado(@PathVariable Long id, @Valid @RequestBody EmpleadoDTO dto) {
         EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
 
@@ -68,7 +83,7 @@ public class EmpleadoController {
 
 
     @Transactional
-    @DeleteMapping("/empleado/{id}")
+    @DeleteMapping("/EliminarEmpleado/{id}")
     public ResponseEntity<?> deleteEmpleado(@PathVariable Long id) {
         EmpleadoEntity existingEmpleado = iEmpleado.findEmployee(id);
 
