@@ -9,7 +9,7 @@ public class EmpleadoMapper {
         if (entity == null) return null;
 
         return EmpleadoDTO.builder()
-                .id_Empleado(entity.getId_empleado())
+                .id_empleado(entity.getId_empleado())
                 .nombre(entity.getNombre())
                 .apellido(entity.getApellido())
                 .telefono(entity.getTelefono())
@@ -21,9 +21,10 @@ public class EmpleadoMapper {
         if (dto == null) return null;
 
         EmpleadoEntity entity = new EmpleadoEntity();
-        entity.setId_empleado(dto.getId_Empleado());
+        entity.setId_empleado(dto.getId_empleado());
         entity.setNombre(dto.getNombre());
         entity.setApellido(dto.getApellido());
+        entity.setCargo(dto.getCargo());
         entity.setTelefono(dto.getTelefono());
         entity.setCorreo(dto.getCorreo());
         return entity;

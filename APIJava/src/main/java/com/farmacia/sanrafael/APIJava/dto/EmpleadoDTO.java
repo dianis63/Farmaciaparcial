@@ -9,11 +9,10 @@ import lombok.*;
 @Builder
 public class EmpleadoDTO {
 
-    private Long id_Empleado;
+    private Long id_empleado;
     private String nombre;
     private String apellido;
+    private String cargo;
     private String telefono;
     private String correo;
-    private String cargo;
-
 }

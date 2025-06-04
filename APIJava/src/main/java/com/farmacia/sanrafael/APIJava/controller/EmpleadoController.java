@@ -20,7 +20,7 @@ public class EmpleadoController {
     private IEmpleado iEmpleado;
 
     @Transactional(readOnly = true)
-    @GetMapping("/EmpleadosExistentes")
+    @GetMapping("/empleados")
     public ResponseEntity<?> getEmpleados() {
         return new ResponseEntity<>(MessageResponse.builder()
                 .message("Empleados recuperados con éxito.")
@@ -45,15 +45,17 @@ public class EmpleadoController {
     }
 
     @Transactional
-    @PostMapping("/CreaaEmpleado")
-    public ResponseEntity<?> save(@Valid @RequestBody EmpleadoEntity empleado) {
+    @PostMapping("/empleado")
+
+    public ResponseEntity<?> save(@Valid @RequestBody EmpleadoDTO dto) {
+        EmpleadoEntity empleado = EmpleadoMapper.toEntity(dto);
+        EmpleadoEntity saved = iEmpleado.save(empleado);
         return new ResponseEntity<>(MessageResponse.builder()
-                .message(String.format("Empleado %s %s guardado con éxito.", empleado.getNombre(), empleado.getApellido()))
-                .data(iEmpleado.save(empleado))
+                .message(String.format("Empleado %s %s guardado con éxito.", saved.getNombre(), saved.getApellido()))
+                .data(EmpleadoMapper.toDTO(saved))
                 .build(),
                 HttpStatus.OK);
     }
-
 
 
     @Transactional
@@ -69,9 +71,9 @@ public class EmpleadoController {
 
         existingEmpleado.setNombre(dto.getNombre());
         existingEmpleado.setApellido(dto.getApellido());
+        existingEmpleado.setCargo(dto.getCargo());
         existingEmpleado.setTelefono(dto.getTelefono());
         existingEmpleado.setCorreo(dto.getCorreo());
-        existingEmpleado.setCargo(dto.getCargo());
 
         EmpleadoEntity updated = iEmpleado.save(existingEmpleado);
 
